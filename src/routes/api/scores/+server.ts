@@ -169,7 +169,7 @@ export async function POST({ request, cookies, getClientAddress }) {
     entry.username = userInfoBody.global_name;
 
     const guildInfo = await getGuildMemberInfo(discord_access_token, "574720535888396288");
-    if (guildInfo.nick !== null) {
+    if (guildInfo.nick !== null && guildInfo.nick !== undefined) {
         entry.username = guildInfo.nick.replace(/\([^)]*\)/g, "").replace(/\[[^)]*\]/g, "").trim();
         if (entry.username.length <= 3){
             entry.username = entry.global_name;

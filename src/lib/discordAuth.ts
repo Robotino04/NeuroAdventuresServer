@@ -19,7 +19,7 @@ export class DiscordUserInfo {
     // verified: boolean;
 }
 
-export class  DiscordGuildMember{
+export class DiscordGuildMember {
     user: unknown;
     nick: string | null;
     // avatar: string | null;
@@ -43,17 +43,15 @@ export function isDiscordUserInfo(obj: any): obj is DiscordUserInfo {
         // typeof obj.banner_color == "string" &&
         typeof obj.mfa_enabled == "boolean" &&
         typeof obj.locale == "string";
-        // typeof obj.email == "string" &&
-        // typeof obj.verified == "boolean";
+    // typeof obj.email == "string" &&
+    // typeof obj.verified == "boolean";
 }
 export function isDiscordGuildMember(obj: any): obj is DiscordGuildMember {
     return (typeof obj.nick == "string" || obj.nick == null);
 
 }
 
-const DISCORD_CLIENT_ID: string = import.meta.env.VITE_DISCORD_CLIENT_ID;
-const DISCORD_CLIENT_SECRET: string = import.meta.env.VITE_DISCORD_CLIENT_SECRET;
-const DISCORD_REDIRECT_URI: string = import.meta.env.VITE_DISCORD_REDIRECT_URI;
+import { DISCORD_CLIENT_ID, DISCORD_REDIRECT_URI, DISCORD_CLIENT_SECRET } from '$env/static/private';
 
 export type DiscordTokenData = { access_token: string; refresh_token: string; error: number; expires_in: number };
 
@@ -78,7 +76,7 @@ export async function turnCodeToTokens(returnCode: string, apiEndpoint: string =
     return response;
 }
 
-export async function getGuildMemberInfo(token: string, server_id: string): Promise<DiscordGuildMember>{
+export async function getGuildMemberInfo(token: string, server_id: string): Promise<DiscordGuildMember> {
     // performing a Fetch request to Discord's token endpoint
     const request = await fetch(`https://discord.com/api/v10/users/@me/guilds/${server_id}/member`, {
         method: 'GET',
@@ -86,10 +84,10 @@ export async function getGuildMemberInfo(token: string, server_id: string): Prom
     });
 
     const response = await request.json() as unknown;
-    if (isDiscordGuildMember(response)){
+    if (isDiscordGuildMember(response)) {
         return response;
     }
-    else{
+    else {
         throw error(500, "Discord isn't telling me your username.");
     }
 }

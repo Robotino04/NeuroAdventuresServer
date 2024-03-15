@@ -16,6 +16,9 @@
             `${base}/api/scores?n=${numEntriesPerPage}&o=${baseEntry}&gamemode=${gamemode.toLowerCase()}`,
         );
         const value = await res.json();
+        if (res.status != 200) {
+            throw new Error(value.message);
+        }
 
         return value;
     })(gamemode, baseEntry, numEntriesPerPage);

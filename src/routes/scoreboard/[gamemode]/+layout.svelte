@@ -7,7 +7,6 @@
 <div class="container">
     <nav class="header">
         <ol>
-            <li><a href="{base}/scoreboard/global">Global</a></li>
             {#each allGamemodes as gamemode}
                 <li>
                     <a href="{base}/scoreboard/{gamemode}/"

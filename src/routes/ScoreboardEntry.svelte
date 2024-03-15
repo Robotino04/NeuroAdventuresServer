@@ -21,10 +21,9 @@
 <style>
     tr {
         padding: 10px;
-        background-color: #fff;
+        background-color: var(--background-color-2);
         border-radius: 8px;
         margin-bottom: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .place {
@@ -34,7 +33,7 @@
     }
 
     .place_1 {
-        color: var(--jam);
+        color: var(--accent-color);
     }
 
     .place_2 {
@@ -52,13 +51,6 @@
 
     .gamemode {
         text-transform: capitalize;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        tr {
-            background-color: #333;
-            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-        }
     }
 
     @media screen and (max-device-width: 640px) {

@@ -70,14 +70,16 @@
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
+        color: var(--text-color-on-background);
+        box-shadow: 2px 4px 20px 3px var(--table-shadow-color);
     }
 
     th {
         padding: 12px;
         padding-left: 0;
         text-align: left;
-        background-color: var(--jam);
-        color: #fff;
+        background-color: var(--accent-color);
+        color: var(--text-color-on-accent);
     }
 
     .name-style-toggle {
@@ -95,21 +97,17 @@
     p {
         width: 100%;
     }
-    .place{
+    .place {
         padding-left: 12px;
         width: 0;
-    }
-
-
-    @media (prefers-color-scheme: dark) {
-        table {
-            color: #fff;
-        }
     }
 
     @media screen and (max-device-width: 640px) {
         .gamemode {
             display: none;
+        }
+        table {
+            font-size: 1.5rem;
         }
     }
 

@@ -4,7 +4,7 @@ import secrets
 import time
 from pprint import pprint
 
-baseUrl = "http://localhost:5173/toasted"
+baseUrl = "http://localhost:5173/neuroadventures"
 
 
 headersList = {

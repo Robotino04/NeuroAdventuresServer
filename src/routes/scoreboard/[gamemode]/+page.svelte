@@ -30,9 +30,10 @@
     }
 
     h1 {
-        color: var(--jam);
-        margin-bottom: 0;
+        color: var(--accent-color);
         margin: auto;
+        margin-bottom: 0;
+        margin-top: 0.5em;
     }
 
 </style>

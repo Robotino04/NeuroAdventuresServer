@@ -58,11 +58,15 @@
         text-align: center;
     }
     button {
-        background-color: var(--jam);
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: var(--text-color-on-accent);
+
+        border-color: transparent;
+        border-style: solid;
         border-radius: 4px;
+        border-width: 6px;
+
+        padding: 8px 16px;
         cursor: pointer;
         transition: background-color 0.3s;
         margin-right: 5px;
@@ -70,11 +74,17 @@
     }
 
     button:hover {
-        background-color: var(--dark-jam);
+        border-color: var(--button-border-color);
     }
 
     .current-page {
         text-align: center;
         margin: auto;
+    }
+
+    @media screen and (max-device-width: 640px) {
+        .current-page {
+            font-size: 1.5rem;
+        }
     }
 </style>

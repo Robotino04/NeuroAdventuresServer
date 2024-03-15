@@ -52,12 +52,15 @@
         z-index: 1;
         align-self: center;
     }
-    .message_hidden{
+    .message_hidden {
         color: rgba(0, 0, 0, 0);
     }
     .hovered {
         z-index: 2;
         cursor: default;
         padding-left: 7px;
+    }
+    .hovered:hover {
+        cursor: pointer;
     }
 </style>

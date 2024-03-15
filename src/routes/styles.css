@@ -1,0 +1,23 @@
+:root {
+    --accent-color: #e29489;
+    --button-border-color: #855b39;
+    --background-color: #f9e79f;
+    --text-color-on-background: #555;
+    --background-color-2: white;
+    --text-color-on-background-2: black;
+    --table-shadow-color: rgba(0, 0, 0, 0.1);
+
+    --text-color-on-accent: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent-color: #ff9183;
+        --button-border-color: #855b39;
+        --background-color: #1a1a1a;
+        --text-color-on-background: #aaa;
+        --background-color-2: #333;
+        --text-color-on-background-2: #ddd;
+        --table-shadow-color: rgba(0, 0, 0, 0);
+    }
+}

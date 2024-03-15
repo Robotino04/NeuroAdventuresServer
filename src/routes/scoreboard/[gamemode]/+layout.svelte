@@ -21,7 +21,7 @@
 </div>
 
 <style>
-    .container{
+    .container {
         max-width: 80%;
         display: flex;
         align-items: center;
@@ -34,13 +34,14 @@
     nav.header {
         width: 100%;
         margin: auto;
-        border: 3px solid #ffeecc;
-        background-color: #fff5e1;
+        background-color: var(--background-color-2);
         padding: 0;
         padding-top: 10px;
         padding-bottom: 10px;
         border-radius: 8px;
         font-size: x-large;
+        box-shadow: 2px 4px 20px 2px var(--table-shadow-color);
+        overflow: scroll;
     }
 
     nav.header ol {
@@ -59,25 +60,15 @@
 
     nav.header a {
         text-decoration: none;
-        color: #333;
+        color: var(--text-color-on-background-2);
         transition: color 0.3s;
     }
 
     nav.header a:hover {
-        color: var(--jam);
-    }
-    @media (prefers-color-scheme: dark) {
-        nav.header {
-            border-color: #6c757d;
-            background-color: #333;
-        }
-
-        nav.header a {
-            color: #fff;
-        }
+        color: var(--accent-color);
     }
     @media screen and (max-device-width: 640px) {
-        .container{
+        .container {
             max-width: 100%;
             font-size: 1rem;
         }

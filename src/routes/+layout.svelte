@@ -1,7 +1,5 @@
 <script>
-
-    import { base } from "$app/paths";
-
+    import "./styles.css";
 </script>
-<link rel="stylesheet" href="{base}/global.css" />
-<slot/>
+
+<slot />

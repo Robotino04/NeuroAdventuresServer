@@ -4,30 +4,92 @@ import secrets
 import time
 from pprint import pprint
 
-baseUrl = "http://localhost:5173/neuroadventures"
+BASE_URL = "http://localhost:5173/neuroadventures"
 
 
-headersList = {
+global_headers = {
     "Accept": "*/*",
-    "User-Agent": "Neuro Adventures! client (https://someurl.example.com)" 
+    "User-Agent": "Neuro Adventures! client (https://someurl.example.com)",
 }
+
 
 def authenticate():
     state = secrets.token_hex(16)
 
-    webbrowser.open(baseUrl + f"/auth/discord/redirect?state={state}")
+    webbrowser.open(f"{BASE_URL}/auth/discord/redirect?state={state}")
 
-    reqUrl = baseUrl + f"/auth/discord/tokens?state={state}"
-    while (response := requests.request("GET", reqUrl, data="",  headers=headersList)).status_code == 503:
+    while (
+        response := requests.request(
+            "GET",
+            f"{BASE_URL}/auth/discord/tokens?state={state}",
+            data="",
+            headers=global_headers,
+        )
+    ).status_code == 503:
         # retry until response is no longer 503 Unavailable
         # probably add a timeout for real use
         time.sleep(1)
 
-    if (response.status_code != 200):
+    if response.status_code != 200:
         raise RuntimeError("Authentication failed")
 
     json = response.json()
     return json["access_token"], json["refresh_token"]
 
+
+def get_user_info(tokens):
+    headers = global_headers.copy()
+    headers.update({"Authorization": f"Bearer {tokens[0]}"})
+    response = requests.request(
+        "GET",
+        "https://discordapp.com/api/oauth2/@me",
+        data="",
+        headers=headers,
+    )
+
+    if response.status_code != 200:
+        raise RuntimeError("Authentication failed")
+
+    json = response.json()
+    return json["user"]
+
+
+def refresh_if_needed(tokens):
+    try:
+        get_user_info(tokens)
+        return tokens
+    
+    except RuntimeError:
+        headers = global_headers.copy()
+        headers.update({"Authorization": f"Bearer {tokens[1]}"})
+        response = requests.request(
+            "POST",
+            f"{BASE_URL}/auth/discord/refresh",
+            data="",
+            headers=headers,
+        )
+
+        if response.status_code != 200:
+            raise RuntimeError("Authentication failed")
+
+        json = response.json()
+        return json["access_token"], json["refresh_token"]
+
+
+def revoke(tokens):
+    headers = global_headers.copy()
+    headers.update({"Authorization": f"Bearer {tokens[0]}"})
+    response = requests.request(
+        "POST",
+        f"{BASE_URL}/auth/discord/revoke",
+        data="",
+        headers=headers,
+    )
+
+    if response.status_code != 200:
+        raise RuntimeError("Authentication failed")
+
 tokens = authenticate()
-pprint(tokens)
+tokens = refresh_if_needed(tokens)
+print(get_user_info(tokens))
+revoke(tokens)

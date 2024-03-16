@@ -51,7 +51,7 @@ export function isDiscordGuildMember(obj: any): obj is DiscordGuildMember {
 
 }
 
-import { DISCORD_CLIENT_ID, DISCORD_REDIRECT_URI, DISCORD_CLIENT_SECRET } from '$env/static/private';
+import { DISCORD_CLIENT_ID, DISCORD_REDIRECT_URI, DISCORD_CLIENT_SECRET, DISCORD_API_URL } from '$env/static/private';
 
 export type DiscordTokenData = { access_token: string; refresh_token: string; error: number; expires_in: number };
 
@@ -65,8 +65,7 @@ export async function turnCodeToTokens(returnCode: string, apiEndpoint: string =
         scope: 'identify guilds.members.read'
     };
 
-    // performing a Fetch request to Discord's token endpoint
-    const request = await fetch('https://discord.com/api/oauth2/token', {
+    const request = await fetch(`${DISCORD_API_URL}/oauth2/token`, {
         method: 'POST',
         body: new URLSearchParams(dataObject),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -77,8 +76,7 @@ export async function turnCodeToTokens(returnCode: string, apiEndpoint: string =
 }
 
 export async function getGuildMemberInfo(token: string, server_id: string): Promise<DiscordGuildMember> {
-    // performing a Fetch request to Discord's token endpoint
-    const request = await fetch(`https://discord.com/api/v10/users/@me/guilds/${server_id}/member`, {
+    const request = await fetch(`${DISCORD_API_URL}/users/@me/guilds/${server_id}/member`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}` }
     });

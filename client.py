@@ -5,7 +5,7 @@ import time
 from pprint import pprint
 
 BASE_URL = "http://localhost:5173/neuroadventures"
-
+DISCORD_API_URL = "https://discordapp.com/api"
 
 global_headers = {
     "Accept": "*/*",
@@ -42,7 +42,7 @@ def get_user_info(tokens):
     headers.update({"Authorization": f"Bearer {tokens[0]}"})
     response = requests.request(
         "GET",
-        "https://discordapp.com/api/oauth2/@me",
+        f"{DISCORD_API_URL}/oauth2/@me",
         data="",
         headers=headers,
     )

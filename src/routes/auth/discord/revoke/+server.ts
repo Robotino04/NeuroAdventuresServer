@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '$env/static/private';
+import { DISCORD_API_URL, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '$env/static/private';
 
 export async function POST({ request }) {
   var discord_access_token = request.headers.get("Authorization");
@@ -19,8 +19,7 @@ export async function POST({ request }) {
     'Authorization': 'Basic ' + btoa(DISCORD_CLIENT_ID + ':' + DISCORD_CLIENT_SECRET)
   };
 
-  // performing a Fetch request to Discord's token endpoint
-  const dc_request = await fetch("https://discord.com/api/oauth2/token/revoke", {
+  const dc_request = await fetch(`${DISCORD_API_URL}/oauth2/token/revoke`, {
     method: 'POST',
     headers: headers,
     body: data

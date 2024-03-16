@@ -5,6 +5,7 @@ import { getGuildMemberInfo, isDiscordUserInfo } from "$lib/discordAuth.js";
 import { allGamemodes } from "$lib/Gamemode.js";
 import { building } from "$app/environment";
 import DatabaseConstructor, { type Database } from "better-sqlite3";
+import { DISCORD_API_URL } from "$env/static/private";
 
 let db: Database;
 
@@ -16,7 +17,6 @@ type Queries = {
     getHistoricHighscoresOfGamemode: string,
     getNumHistoricHighscoresOfGamemode: string,
 };
-
 
 let queries: Queries;
 
@@ -49,7 +49,6 @@ if (!building) {
 
 let submissions_on_cooldown: Map<string, Date> = new Map<string, Date>();
 
-const MAX_OUT_OF_TIME_DIFFERENCE_MS = 1 * 60 * 60 * 1000; // 1 hour
 const MAX_SCORE = 20_000;
 const SUBMISSION_TIMEOUT_MS = 10 * 1000; // 1 minute
 const MIN_PLAYERNAME_LENGTH = 4;
@@ -119,12 +118,7 @@ export async function GET({ url }) {
     return json({ scores: rows, num_scores });
 }
 
-function containsAccessToken(obj: any): obj is { discord_access_token: string } {
-    return typeof obj.discord_access_token === "string";
-}
-
-const DISCORD_API_URL: string = import.meta.env.VITE_DISCORD_API_URL;
-export async function POST({ request, cookies, getClientAddress }) {
+export async function POST({ request }) {
     var discord_access_token = request.headers.get("Authorization");
     if (!discord_access_token) {
         throw error(401, "Must include access token.");
@@ -134,7 +128,6 @@ export async function POST({ request, cookies, getClientAddress }) {
     const body = await request.json();
     console.log(discord_access_token);
     console.log(body);
-
 
     const userInfo = await fetch(`${DISCORD_API_URL}/users/@me`, {
         headers: { 'Authorization': `Bearer ${discord_access_token}` }

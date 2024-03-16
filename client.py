@@ -3,6 +3,7 @@ import webbrowser
 import secrets
 import time
 from pprint import pprint
+import json
 
 BASE_URL = "http://localhost:5173/neuroadventures"
 DISCORD_API_URL = "https://discordapp.com/api"
@@ -39,7 +40,7 @@ def authenticate():
 
 def get_user_info(tokens):
     headers = global_headers.copy()
-    headers.update({"Authorization": f"Bearer {tokens[0]}"})
+    headers["Authorization"] = f"Bearer {tokens[0]}"
     response = requests.request(
         "GET",
         f"{DISCORD_API_URL}/oauth2/@me",
@@ -58,10 +59,10 @@ def refresh_if_needed(tokens):
     try:
         get_user_info(tokens)
         return tokens
-    
+
     except RuntimeError:
         headers = global_headers.copy()
-        headers.update({"Authorization": f"Bearer {tokens[1]}"})
+        headers["Authorization"] = f"Bearer {tokens[1]}"
         response = requests.request(
             "POST",
             f"{BASE_URL}/auth/discord/refresh",
@@ -78,7 +79,7 @@ def refresh_if_needed(tokens):
 
 def revoke(tokens):
     headers = global_headers.copy()
-    headers.update({"Authorization": f"Bearer {tokens[0]}"})
+    headers["Authorization"] = f"Bearer {tokens[0]}"
     response = requests.request(
         "POST",
         f"{BASE_URL}/auth/discord/revoke",
@@ -89,7 +90,36 @@ def revoke(tokens):
     if response.status_code != 200:
         raise RuntimeError("Authentication failed")
 
+
+def submit_score(tokens, score, gamemode):
+    headers = global_headers.copy()
+    headers["Authorization"] = f"Bearer {tokens[0]}"
+    headers["Content-Type"] = "application/json"
+
+    data = json.dumps(
+        {
+            "score": score,
+            "gamemode": gamemode,
+        }
+    )
+
+    response = requests.request(
+        "POST",
+        f"{BASE_URL}/api/scores",
+        data=data,
+        headers=headers,
+    )
+    if response.status_code != 201:
+        raise RuntimeError("Something went wrong")
+
+
 tokens = authenticate()
-tokens = refresh_if_needed(tokens)
-print(get_user_info(tokens))
-revoke(tokens)
+try:
+    tokens = refresh_if_needed(tokens)
+    print(get_user_info(tokens))
+
+    tokens = refresh_if_needed(tokens)
+    submit_score(tokens, 1234, "adventure")
+
+finally:
+    revoke(tokens)

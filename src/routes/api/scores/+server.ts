@@ -5,7 +5,7 @@ import { getGuildMemberInfo, isDiscordUserInfo } from "$lib/discordAuth.js";
 import { allGamemodes } from "$lib/Gamemode.js";
 import { building } from "$app/environment";
 import DatabaseConstructor, { type Database } from "better-sqlite3";
-import { DISCORD_API_URL } from "$env/static/private";
+import { DISCORD_API_URL, DISCORD_SERVER_ID } from "$env/static/private";
 
 let db: Database;
 
@@ -79,11 +79,6 @@ function detectObviousCheats(entry: ScoreboardEntry) {
 }
 
 function detectImpossibleEntries(entry: ScoreboardEntry) {
-    if (entry.score < 500) {
-        console.log("score too low");
-        throw error(400, "Score is too low. Must be above 500.");
-    }
-
     if (entry.username.length < MIN_PLAYERNAME_LENGTH) {
         console.log("player name too short");
         throw error(400, `Player name is too short. Use at least ${MIN_PLAYERNAME_LENGTH} characters.`);
@@ -110,9 +105,8 @@ export async function GET({ url }) {
     }
 
     let rows = db.prepare(queries.getHistoricHighscoresOfGamemode).all([gamemode, o, n]);
-
-
     let num_scores = db.prepare(queries.getNumHistoricHighscoresOfGamemode).get([gamemode]);
+
     num_scores = (num_scores as any)["COUNT(*)"];
 
     return json({ scores: rows, num_scores });
@@ -151,7 +145,7 @@ export async function POST({ request }) {
     entry.global_name = userInfoBody.global_name;
     entry.username = userInfoBody.global_name;
 
-    const guildInfo = await getGuildMemberInfo(discord_access_token, "574720535888396288");
+    const guildInfo = await getGuildMemberInfo(discord_access_token, DISCORD_SERVER_ID);
     if (guildInfo.nick !== null && guildInfo.nick !== undefined) {
         entry.username = guildInfo.nick.replace(/\([^)]*\)/g, "").replace(/\[[^)]*\]/g, "").trim();
         if (entry.username.length <= 3) {

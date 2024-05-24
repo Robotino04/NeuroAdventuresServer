@@ -7,9 +7,13 @@
 
     function clampToPages(newBase: number) {
         newBase = Math.floor(newBase / numEntriesPerPage) * numEntriesPerPage;
-        newBase = Math.min(
-            Math.max(newBase, 0),
-            Math.floor(numEntries / numEntriesPerPage) * numEntriesPerPage,
+        newBase = Math.max(
+            Math.min(
+                newBase,
+                Math.floor((numEntries-1) / numEntriesPerPage) *
+                    numEntriesPerPage,
+            ),
+            0,
         );
         return newBase;
     }
@@ -26,28 +30,32 @@
     <button
         on:click={() => {
             setBaseEntry(0);
-        }}>&LeftAngleBracket;&LeftAngleBracket;</button
-    >
+        }}
+        >&LeftAngleBracket;&LeftAngleBracket;
+    </button>
     <button
         on:click={() => {
             setBaseEntry(baseEntry - numEntriesPerPage);
-        }}>&LeftAngleBracket;</button
-    >
+        }}
+        >&LeftAngleBracket;
+    </button>
     <div class="current-page">
-        {baseEntry / numEntriesPerPage + 1} / {Math.floor(
+        {baseEntry / numEntriesPerPage + 1} / {Math.ceil(
             numEntries / numEntriesPerPage,
-        ) + 1}
+        )}
     </div>
     <button
         on:click={() => {
             setBaseEntry(baseEntry + numEntriesPerPage);
-        }}>&RightAngleBracket;</button
-    >
+        }}
+        >&RightAngleBracket;
+    </button>
     <button
         on:click={() => {
             setBaseEntry(numEntries);
-        }}>&RightAngleBracket;&RightAngleBracket;</button
-    >
+        }}
+        >&RightAngleBracket;&RightAngleBracket;
+    </button>
 </div>
 
 <style>
